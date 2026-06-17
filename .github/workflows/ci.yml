@@ -13,33 +13,18 @@ jobs:
 
       - name: Install dependencies
         run: |
-          set -e
-          retry() {
-            local n=1
-            local max=3
-            local delay=5
-            while true; do
-              "$@" && break
-              if [ "$n" -ge "$max" ]; then
-                return 1
-              fi
-              n=$((n+1))
-              sleep "$delay"
-            done
-          }
-
-          retry sudo apt-get update
-          retry sudo apt-get install -y build-essential cmake pkg-config git ca-certificates
-
-          if ! retry sudo apt-get install -y libsdl3-dev; then
-            echo "libsdl3-dev unavailable, building SDL3 from source..."
-            rm -rf /tmp/SDL
-            retry git clone --depth 1 https://github.com/libsdl-org/SDL.git /tmp/SDL
-            cmake -S /tmp/SDL -B /tmp/SDL/build -DCMAKE_BUILD_TYPE=Release -DSDL_SHARED=ON -DSDL_STATIC=OFF
-            cmake --build /tmp/SDL/build -j"$(nproc)"
-            sudo cmake --install /tmp/SDL/build
-            sudo ldconfig
-          fi
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq build-essential cmake git pkg-config
+          echo "Building SDL3 from source..."
+          rm -rf /tmp/SDL /tmp/SDL-build
+          git clone --depth 1 https://github.com/libsdl-org/SDL.git /tmp/SDL
+          cd /tmp/SDL
+          mkdir -p build && cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DSDL_SHARED=ON -DSDL_STATIC=OFF -DSDL_TESTS=OFF
+          cmake --build . -j"$(nproc)" --config Release
+          sudo cmake --install .
+          sudo ldconfig
+          echo "SDL3 installed from source successfully"
 
       - name: Build game
         run: |
