@@ -174,10 +174,7 @@ void click() {
 
 #else
 
-/* SDL3 not available - stub implementations */
-int InitWindow() { return -1; }
-void show(int **Game) { }
-void click() { printf("SDL3 not available - UI mode disabled.\n"); }
+/* SDL3 not available - stub implementations handled in GameWindow.h */
 
 #endif
 

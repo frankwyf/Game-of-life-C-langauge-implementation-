@@ -30,6 +30,8 @@ bool Paused;
 int InitWindow();
 /*the function to show next generation in SDL mode*/
 void show(int **Game);
+/*the function to intialize a window for click*/
+void click();
 
 #else
 /* SDL3 not available - stub implementations */
@@ -39,9 +41,8 @@ int WindowSize;
 bool Paused;
 static inline int InitWindow() { return -1; }
 static inline void show(int **Game) { }
+static inline void click() { printf("SDL3 not available - UI mode disabled.\n"); }
 #endif
-/*the function to intialize a window for click*/
-void click();
 /*the function to display message on the window*/
 int title(int round);
 void RandomizeBoard();
