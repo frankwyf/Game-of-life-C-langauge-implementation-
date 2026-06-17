@@ -3,7 +3,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
+#ifdef SDL3_AVAILABLE
 #include <SDL3/SDL.h>
+#endif
 #include "DataStructure.h"
 #include "Check.h"
 #include "NextGenre.h"

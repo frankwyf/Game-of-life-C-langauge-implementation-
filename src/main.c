@@ -4,14 +4,18 @@
 #include <ctype.h>
 #include <time.h>
 #include <stdbool.h>
+#ifdef SDL3_AVAILABLE
 #include <SDL3/SDL.h>
+#endif
 #include "DataStructure.h"
 #include "NextGenre.h"
 #include "GameWindow.h"
 #include "GameUi.h"
 
 //undefine the key word "main" in SDL macro definition
+#ifndef NO_SDL3
 #undef main
+#endif
 
 static void BuildRandomBoard(int rows, int cols)
 {

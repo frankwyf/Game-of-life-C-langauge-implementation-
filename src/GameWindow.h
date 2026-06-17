@@ -1,5 +1,7 @@
 #ifndef GameWindow_GUARD__H 
 #define GameWindow_GUARD__H
+
+#ifdef SDL3_AVAILABLE
 #include <SDL3/SDL.h>
 
 #define DEFAULT_WINDOW_SIZE 900
@@ -28,6 +30,16 @@ bool Paused;
 int InitWindow();
 /*the function to show next generation in SDL mode*/
 void show(int **Game);
+
+#else
+/* SDL3 not available - stub implementations */
+#define DEFAULT_WINDOW_SIZE 900
+int alive;
+int WindowSize;
+bool Paused;
+static inline int InitWindow() { return -1; }
+static inline void show(int **Game) { }
+#endif
 /*the function to intialize a window for click*/
 void click();
 /*the function to display message on the window*/

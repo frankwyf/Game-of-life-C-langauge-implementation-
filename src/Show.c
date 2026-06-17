@@ -2,7 +2,9 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#ifdef SDL3_AVAILABLE
 #include <SDL3/SDL.h>
+#endif
 #include "GameWindow.h"
 #include "DataStructure.h"
 #include "GameUi.h"
@@ -38,6 +40,8 @@ static void print_timestamp_prefix(void) {
     lt = localtime(&t);
     printf("%d/%d/%d %d:%d:%d", lt->tm_year + 1900, lt->tm_mon + 1, lt->tm_mday, lt->tm_hour, lt->tm_min, lt->tm_sec);
 }
+
+#ifdef SDL3_AVAILABLE
 
 // function to create the window
 int InitWindow() {
@@ -167,6 +171,15 @@ void click() {
 
     WriteResult(game);
 }
+
+#else
+
+/* SDL3 not available - stub implementations */
+int InitWindow() { return -1; }
+void show(int **Game) { }
+void click() { printf("SDL3 not available - UI mode disabled.\n"); }
+
+#endif
 
 // lightweight title/message helper for SDL3 migration stage
 int title(int round) {

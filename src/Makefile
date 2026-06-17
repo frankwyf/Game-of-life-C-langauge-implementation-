@@ -11,7 +11,16 @@ SRC= main.c GameOfLife.c Show.c Check.c GameUi.c
 CC =     gcc
 CFLAGS = -Wall -O
 CFLAGS += -fcommon
-LIBS =   -lSDL3
+
+# Conditional SDL3 support
+ifndef NO_SDL3
+LIBS = -lSDL3
+CFLAGS += -DSDL3_AVAILABLE
+else
+LIBS =
+CFLAGS += -DNO_SDL3
+endif
+
 # compile to  object code
 
 OBJ= $(SRC:.c=.o)
