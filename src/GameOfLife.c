@@ -3,7 +3,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdbool.h>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 #include "DataStructure.h"
 #include "Check.h"
 #include "NextGenre.h"
@@ -355,10 +355,10 @@ void ShowGen(){
         bool quit = false;
         while (!quit) {
             while (SDL_PollEvent(&e) != 0) {
-		        switch (e.type) {
+                switch (e.type) {
                     //press any key to terminate the programme
-		            case SDL_KEYDOWN:
-                        switch (e.key.keysym.sym){
+                    case SDL_EVENT_KEY_DOWN:
+                        switch (e.key.key){
                         case SDLK_RETURN:
                             //replay the game
                             title(-4);
@@ -389,8 +389,8 @@ void ShowGen(){
                         }
                     break;
                     //use mouse to press exit button
-		            case SDL_QUIT:
-		            case SDL_MOUSEBUTTONDOWN:
+                    case SDL_EVENT_QUIT:
+                    case SDL_EVENT_MOUSE_BUTTON_DOWN:
                         move=move-1;
                         printf("Manually terminated at step %i.\n",move);
 			            quit = true;
@@ -420,10 +420,10 @@ void ShowGen(){
         bool quit = false;
         while (!quit) {
 	        while (SDL_PollEvent(&e) != 0) {
-		        switch (e.type) {
+                switch (e.type) {
                     //press any key to terminate the programme
-		            case SDL_KEYDOWN:
-                        switch (e.key.keysym.sym){
+                    case SDL_EVENT_KEY_DOWN:
+                        switch (e.key.key){
                         case SDLK_RETURN:
                             title(-4);
                             //replay the game
@@ -457,8 +457,8 @@ void ShowGen(){
                         }
                     break;
                     //use mouse to press exit button
-		            case SDL_QUIT:
-		            case SDL_MOUSEBUTTONDOWN:
+                    case SDL_EVENT_QUIT:
+                    case SDL_EVENT_MOUSE_BUTTON_DOWN:
                         move=move-1;
                         printf("Terminated at step %i.\n",move);
 			            quit = true;

@@ -2,7 +2,7 @@
 # code details
 
 EXE_DIR = .
-EXE = $(EXE_DIR)/game
+EXE = game
 
 SRC= main.c GameOfLife.c Show.c Check.c
 
@@ -10,7 +10,8 @@ SRC= main.c GameOfLife.c Show.c Check.c
 
 CC =     gcc
 CFLAGS = -Wall -O
-LIBS =   -lSDL2 -lSDL2_ttf 
+CFLAGS += -fcommon
+LIBS =   -lSDL3
 # compile to  object code
 
 OBJ= $(SRC:.c=.o)
@@ -25,8 +26,14 @@ $(EXE): $(OBJ)
 
 # clean up compilation
 
+ifeq ($(OS),Windows_NT)
+CLEANUP = del /F /Q
+else
+CLEANUP = rm -f
+endif
+
 clean:
-	rm -f $(OBJ) $(EXE)
+	-$(CLEANUP) $(OBJ) $(EXE)
 
 # dependencies
 

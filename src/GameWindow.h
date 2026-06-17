@@ -1,6 +1,6 @@
 #ifndef GameWindow_GUARD__H 
 #define GameWindow_GUARD__H
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 /*
   This head file is used to store the functions and variables 
   used in SDL windows and renders
