@@ -33,7 +33,7 @@ SRC_FILES2=$(UNITY_ROOT)/src/unity.c ../src/Check.c ../src/GameOfLife.c ../src/S
 INC_DIRS=-I$(SRCs)src -I$(UNITY_ROOT)/src 
 LIBS =   -lSDL3
 
-all: clean default
+all: default
 
 default: $(SRC_FILES1) $(SRC_FILES2)
 	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC_FILES1) -o $(TARGET1) $(LIBS)
@@ -44,7 +44,7 @@ run: default
 	- ./$(TARGET2)
 
 clean:
-	$(CLEANUP) $(TARGET1) $(TARGET2)
+	-$(CLEANUP) $(TARGET1) $(TARGET2)
 
 
-ci: default
+ci: default run
