@@ -23,6 +23,7 @@ jobs:
 
       - name: Smoke test game startup
         run: |
+          export SDL_VIDEODRIVER=dummy
           cd src
           ./game --smoke-test
 
@@ -60,6 +61,7 @@ jobs:
       - name: Build game and tests
         shell: msys2 {0}
         run: |
+          export SDL_VIDEODRIVER=dummy
           make -C src clean
           make -C src
           ./src/game.exe --smoke-test
