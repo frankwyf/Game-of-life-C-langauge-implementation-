@@ -13,11 +13,28 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential cmake pkg-config
-          if ! sudo apt-get install -y libsdl3-dev; then
-            echo "libsdl3-dev not available, building SDL3 from source..."
-            git clone --depth 1 https://github.com/libsdl-org/SDL.git /tmp/SDL
+          set -e
+          retry() {
+            local n=1
+            local max=3
+            local delay=5
+            while true; do
+              "$@" && break
+              if [ "$n" -ge "$max" ]; then
+                return 1
+              fi
+              n=$((n+1))
+              sleep "$delay"
+            done
+          }
+
+          retry sudo apt-get update
+          retry sudo apt-get install -y build-essential cmake pkg-config git ca-certificates
+
+          if ! retry sudo apt-get install -y libsdl3-dev; then
+            echo "libsdl3-dev unavailable, building SDL3 from source..."
+            rm -rf /tmp/SDL
+            retry git clone --depth 1 https://github.com/libsdl-org/SDL.git /tmp/SDL
             cmake -S /tmp/SDL -B /tmp/SDL/build -DCMAKE_BUILD_TYPE=Release -DSDL_SHARED=ON -DSDL_STATIC=OFF
             cmake --build /tmp/SDL/build -j"$(nproc)"
             sudo cmake --install /tmp/SDL/build
