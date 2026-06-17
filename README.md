@@ -54,6 +54,13 @@ cd test
 mingw32-make
 ```
 
+For CI-oriented local validation, run:
+
+```bash
+cd test
+mingw32-make ci
+```
+
 ## Controls
 
 - `Backspace`: re-initialize the current board
@@ -73,6 +80,13 @@ Please read `CONTRIBUTING.md` before opening a pull request.
 ## Security
 
 If you find a vulnerability, please follow `SECURITY.md`.
+
+## CI/CD
+
+GitHub Actions workflow is provided in `.github/workflows/ci.yml`:
+
+- Linux job: build + run Unity test binaries
+- Windows job: build + run Unity test binaries in MSYS2 UCRT64
 
 ## License
 

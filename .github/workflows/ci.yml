@@ -1,0 +1,68 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  linux-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libsdl3-dev
+
+      - name: Build game
+        run: |
+          make -C src clean
+          make -C src
+
+      - name: Build tests
+        run: |
+          make -C test clean
+          make -C test
+
+      - name: Run datastructure tests
+        run: |
+          cd test
+          ./datastructure.out
+
+      - name: Run check tests
+        run: |
+          cd test
+          ./check.out
+
+  windows-build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            make
+            gcc
+            mingw-w64-ucrt-x86_64-SDL3
+
+      - name: Build game and tests
+        shell: msys2 {0}
+        run: |
+          make -C src clean
+          make -C src
+          make -C test clean
+          make -C test
+
+      - name: Run tests in MSYS2
+        shell: msys2 {0}
+        run: |
+          cd test
+          ./datastructure.exe
+          ./check.exe
