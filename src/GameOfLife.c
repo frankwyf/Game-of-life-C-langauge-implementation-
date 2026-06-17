@@ -8,6 +8,7 @@
 #include "Check.h"
 #include "NextGenre.h"
 #include "GameWindow.h"
+#include "GameUi.h"
 
 
 
@@ -386,27 +387,56 @@ void ShowGen(){
                             show(Game);
                             move=1;
                             break;
+                        case SDLK_SPACE:
+                            Paused = !Paused;
+                            title(move);
+                            break;
+                        case SDLK_UP:
+                            Delay = DecreaseDelay(Delay);
+                            title(move);
+                            break;
+                        case SDLK_DOWN:
+                            Delay = IncreaseDelay(Delay);
+                            title(move);
+                            break;
+                        case SDLK_R:
+                            RandomizeBoard();
+                            show(Game);
+                            break;
+                        case SDLK_C:
+                            ClearBoard();
+                            show(Game);
+                            break;
                         }
                     break;
                     //use mouse to press exit button
                     case SDL_EVENT_QUIT:
-                    case SDL_EVENT_MOUSE_BUTTON_DOWN:
                         move=move-1;
                         printf("Manually terminated at step %i.\n",move);
 			            quit = true;
                         Step=move;
                         rRounds=move;
 			            return;
+		            case SDL_EVENT_MOUSE_BUTTON_DOWN:
+		                if (Paused) {
+		                    float mx = 0.0f;
+		                    float my = 0.0f;
+		                    SDL_GetMouseState(&mx, &my);
+		                    if (ToggleCellAtPoint(Game, Row, Column, WindowSize, mx, my)) {
+		                        show(Game);
+		                    }
+		                }
+		                break;
 		        }
 	        }
-            if(move<=Step){
+            if(!Paused && move<=Step){
                 printf("Step: %d\n",move);
                 move++;
                 NextGen(NextGeneration);
                 printf("\n---------------------------------------------------------------------------------\n\n");
                 show(Game);
             }
-            else{
+            else if (!Paused) {
                 move=move-1;
                 printf("Terminated at step %i.\n",move);
                 rRounds=move;
@@ -454,24 +484,55 @@ void ShowGen(){
                             show(Game);
                             move=1;
                             break;
+                        case SDLK_SPACE:
+                            Paused = !Paused;
+                            title(move);
+                            break;
+                        case SDLK_UP:
+                            Delay = DecreaseDelay(Delay);
+                            title(move);
+                            break;
+                        case SDLK_DOWN:
+                            Delay = IncreaseDelay(Delay);
+                            title(move);
+                            break;
+                        case SDLK_R:
+                            RandomizeBoard();
+                            show(Game);
+                            break;
+                        case SDLK_C:
+                            ClearBoard();
+                            show(Game);
+                            break;
                         }
                     break;
                     //use mouse to press exit button
                     case SDL_EVENT_QUIT:
-                    case SDL_EVENT_MOUSE_BUTTON_DOWN:
                         move=move-1;
                         printf("Terminated at step %i.\n",move);
 			            quit = true;
                         Step=move;
                         rRounds=move;
 			            return;
+		            case SDL_EVENT_MOUSE_BUTTON_DOWN:
+		                if (Paused) {
+		                    float mx = 0.0f;
+		                    float my = 0.0f;
+		                    SDL_GetMouseState(&mx, &my);
+		                    if (ToggleCellAtPoint(Game, Row, Column, WindowSize, mx, my)) {
+		                        show(Game);
+		                    }
+		                }
+		                break;
 		        }
 	        }
-            printf("Step: %d\n",move);
-            NextGen(NextGeneration);
-            move++;
-            printf("\n---------------------------------------------------------------------------------\n\n");
-            show(Game);
+            if (!Paused) {
+                printf("Step: %d\n",move);
+                NextGen(NextGeneration);
+                move++;
+                printf("\n---------------------------------------------------------------------------------\n\n");
+                show(Game);
+            }
         }
     } 
 }

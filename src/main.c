@@ -3,14 +3,34 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#include <stdbool.h>
+#include <SDL3/SDL.h>
 #include "DataStructure.h"
 #include "NextGenre.h"
 #include "GameWindow.h"
+#include "GameUi.h"
 
 //undefine the key word "main" in SDL macro definition
 #undef main
 
 int main(int argc, char **argv){
+    if (argc >= 2 && strcmp(argv[1], "--smoke-test") == 0) {
+        Row = 8;
+        Column = 8;
+        Delay = 10;
+        Step = 1;
+        initialGame();
+        if (InitWindow() != 0) {
+            return 1;
+        }
+        show(Game);
+        SDL_Delay(50);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        printf("Smoke test completed.\n");
+        return 0;
+    }
+
     title(-2);
     time_t t;
     struct tm * lt;

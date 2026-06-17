@@ -4,7 +4,7 @@
 EXE_DIR = .
 EXE = game
 
-SRC= main.c GameOfLife.c Show.c Check.c
+SRC= main.c GameOfLife.c Show.c Check.c GameUi.c
 
 # generic build details
 

@@ -5,10 +5,33 @@
 #include <SDL3/SDL.h>
 #include "GameWindow.h"
 #include "DataStructure.h"
+#include "GameUi.h"
 
 // structures to get time and display timestamps in terminal
 static time_t t;
 static struct tm *lt;
+
+void RandomizeBoard() {
+    int row;
+    int col;
+
+    for (row = 0; row < Row; row++) {
+        for (col = 0; col < Column; col++) {
+            Game[row][col] = rand() % 2;
+        }
+    }
+}
+
+void ClearBoard() {
+    int row;
+    int col;
+
+    for (row = 0; row < Row; row++) {
+        for (col = 0; col < Column; col++) {
+            Game[row][col] = 0;
+        }
+    }
+}
 
 static void print_timestamp_prefix(void) {
     time(&t);
@@ -24,7 +47,8 @@ int InitWindow() {
         return -1;
     }
 
-    window = SDL_CreateWindow("Conway's Game of Life", 600, 600, 0);
+    WindowSize = WindowSizeForBoard(Row, Column);
+    window = SDL_CreateWindow("Conway's Game of Life", WindowSize, WindowSize, 0);
     if (window == NULL) {
         printf("Unable to create window: %s\n", SDL_GetError());
         SDL_Quit();
@@ -39,7 +63,9 @@ int InitWindow() {
         return -1;
     }
 
+    SDL_SetRenderDrawBlendMode(render, SDL_BLENDMODE_BLEND);
     move = 1;
+    Paused = false;
     return 0;
 }
 
@@ -50,23 +76,34 @@ void show(int **Game) {
         return;
     }
 
-    const float cell_w = 600.0f / (float)Column;
-    const float cell_h = 600.0f / (float)Row;
+    const float cell_w = (float)WindowSize / (float)Column;
+    const float cell_h = (float)WindowSize / (float)Row;
 
-    SDL_SetRenderDrawColor(render, 123, 123, 122, 255);
+    alive = CountAliveCellsInBoard(Game, Row, Column);
+
+    SDL_SetRenderDrawColor(render, 14, 17, 26, 255);
     SDL_RenderClear(render);
+
+    SDL_SetRenderDrawColor(render, 34, 41, 58, 255);
+    for (int x = 0; x <= Column; x++) {
+        float px = x * cell_w;
+        SDL_RenderLine(render, px, 0.0f, px, (float)WindowSize);
+    }
+    for (int y = 0; y <= Row; y++) {
+        float py = y * cell_h;
+        SDL_RenderLine(render, 0.0f, py, (float)WindowSize, py);
+    }
 
     for (int y = 0; y < Row; y++) {
         for (int x = 0; x < Column; x++) {
-            alive += Game[y][x];
             if (Game[y][x] > 0) {
                 SDL_FRect square = {
-                    .x = x * cell_w,
-                    .y = y * cell_h,
-                    .w = cell_w - 1.0f,
-                    .h = cell_h - 1.0f,
+                    .x = x * cell_w + 1.0f,
+                    .y = y * cell_h + 1.0f,
+                    .w = cell_w - 2.0f,
+                    .h = cell_h - 2.0f,
                 };
-                SDL_SetRenderDrawColor(render, 0, 255, 0, 255);
+                SDL_SetRenderDrawColor(render, 89, 217, 165, 255);
                 SDL_RenderFillRect(render, &square);
             }
         }
@@ -74,7 +111,9 @@ void show(int **Game) {
 
     SDL_RenderPresent(render);
     title(move);
-    SDL_Delay(Delay);
+    if (!Paused) {
+        SDL_Delay(Delay);
+    }
 }
 
 // the function to initialize a window for click
@@ -98,11 +137,7 @@ void click() {
                     float my = 0.0f;
                     SDL_GetMouseState(&mx, &my);
 
-                    int row = (int)(my / (600.0f / (float)Row));
-                    int col = (int)(mx / (600.0f / (float)Column));
-
-                    if (row >= 0 && row < Row && col >= 0 && col < Column) {
-                        Game[row][col] = (Game[row][col] > 0) ? 0 : 1;
+                    if (ToggleCellAtPoint(Game, Row, Column, WindowSize, mx, my)) {
                         show(Game);
                     }
                     break;
@@ -140,7 +175,7 @@ int title(int round) {
         return 0;
     }
     if (round == -1) {
-        printf("Controls: Backspace=re-initialize, Enter=replay, Esc=quit.\n");
+        printf("Controls: Backspace=re-initialize, Enter=replay, Space=pause, Up/Down=speed, R=randomize, C=clear, click=toggle, Esc=quit.\n");
         return 0;
     }
     if (round == -3) {
@@ -161,7 +196,7 @@ int title(int round) {
     }
 
     int deaded = Row * Column - alive;
-    printf("Step %d | Alive: %d | Dead: %d | ", round - 1, alive, deaded);
+    printf("Step %d | Alive: %d | Dead: %d | Delay: %d ms | Mode: %s | ", round - 1, alive, deaded, Delay, Paused ? "paused" : "running");
     print_timestamp_prefix();
     printf("\n");
     return 0;
