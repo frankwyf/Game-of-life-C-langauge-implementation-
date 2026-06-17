@@ -1,0 +1,61 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows-artifact:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: UCRT64
+          update: true
+          install: >-
+            make
+            gcc
+            mingw-w64-ucrt-x86_64-SDL3
+
+      - name: Build binaries
+        shell: msys2 {0}
+        run: |
+          make -C src clean
+          make -C src
+          mkdir -p release
+          cp src/game.exe release/
+          cp /ucrt64/bin/SDL3.dll release/
+          cp src/Game.txt release/ || true
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: game-of-life-windows
+          path: release/
+
+  publish-release:
+    needs: build-windows-artifact
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: game-of-life-windows
+          path: release
+
+      - name: Archive release bundle
+        run: |
+          cd release
+          zip -r game-of-life-windows.zip .
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release/game-of-life-windows.zip

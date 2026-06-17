@@ -21,6 +21,11 @@ jobs:
           make -C src clean
           make -C src
 
+      - name: Smoke test game startup
+        run: |
+          cd src
+          ./game --smoke-test
+
       - name: Build tests
         run: |
           make -C test clean
@@ -57,6 +62,7 @@ jobs:
         run: |
           make -C src clean
           make -C src
+          ./src/game.exe --smoke-test
           make -C test clean
           make -C test
 

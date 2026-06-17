@@ -65,8 +65,13 @@ mingw32-make ci
 
 - `Backspace`: re-initialize the current board
 - `Enter`: replay from current state
+- `Space`: pause or resume evolution
+- `Up` / `Down`: speed up or slow down animation
+- `R`: randomize the board while running
+- `C`: clear the board while running
 - `Esc`: quit current run
 - Mouse click in setup mode: toggle cell state
+- Mouse click while paused: edit cells live
 
 ## Notes
 
@@ -87,6 +92,7 @@ GitHub Actions workflow is provided in `.github/workflows/ci.yml`:
 
 - Linux job: build + run Unity test binaries
 - Windows job: build + run Unity test binaries in MSYS2 UCRT64
+- Both jobs also run `--smoke-test` startup validation for the main executable
 
 ## License
 
