@@ -14,9 +14,13 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y -qq build-essential cmake git pkg-config
+          sudo apt-get install -y -qq \
+            build-essential cmake git pkg-config \
+            libx11-dev libwayland-dev libgl1-mesa-dev libpulse-dev libasound2-dev \
+            libxcursor-dev libxrandr-dev libxinerama-dev libxi-dev libxext-dev \
+            libudev-dev libibus-1.0-dev fcitx-libs-dev
           echo "Building SDL3 from source..."
-          rm -rf /tmp/SDL /tmp/SDL-build
+          rm -rf /tmp/SDL
           git clone --depth 1 https://github.com/libsdl-org/SDL.git /tmp/SDL
           cd /tmp/SDL
           mkdir -p build && cd build
@@ -24,7 +28,7 @@ jobs:
           cmake --build . -j"$(nproc)" --config Release
           sudo cmake --install .
           sudo ldconfig
-          echo "SDL3 installed from source successfully"
+          echo "SDL3 installed successfully"
 
       - name: Build game
         run: |
