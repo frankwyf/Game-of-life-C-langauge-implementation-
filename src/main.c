@@ -46,10 +46,14 @@ int main(int argc, char **argv){
             printf("Smoke test completed (headless fallback).\n");
             return 0;
         }
+#ifdef SDL3_AVAILABLE
         show(Game);
         SDL_Delay(50);
         SDL_DestroyWindow(window);
         SDL_Quit();
+#else
+        printf("Smoke test completed (NO_SDL3 mode).\n");
+#endif
         for (int i = 0; i < Row; i++) {
             free(Game[i]);
         }
