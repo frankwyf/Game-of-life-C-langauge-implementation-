@@ -6,7 +6,7 @@ on:
 
 jobs:
   linux-build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -42,6 +42,11 @@ jobs:
           cd test
           ./check.out
 
+      - name: Run gameui tests
+        run: |
+          cd test
+          ./gameui.out
+
   windows-build:
     runs-on: windows-latest
     steps:
@@ -54,19 +59,19 @@ jobs:
           msystem: UCRT64
           update: true
           install: >-
-            make
-            gcc
+            mingw-w64-ucrt-x86_64-gcc
+            mingw-w64-ucrt-x86_64-make
             mingw-w64-ucrt-x86_64-SDL3
 
       - name: Build game and tests
         shell: msys2 {0}
         run: |
           export SDL_VIDEODRIVER=dummy
-          make -C src clean
-          make -C src
+          mingw32-make -C src clean
+          mingw32-make -C src
           ./src/game.exe --smoke-test
-          make -C test clean
-          make -C test
+          mingw32-make -C test clean
+          mingw32-make -C test
 
       - name: Run tests in MSYS2
         shell: msys2 {0}
@@ -74,3 +79,4 @@ jobs:
           cd test
           ./datastructure.exe
           ./check.exe
+          ./gameui.exe
