@@ -35,8 +35,6 @@ SRC_FILES2=$(UNITY_ROOT)/src/unity.c ../src/Check.c ../src/GameOfLife.c ../src/S
 INC_DIRS=-I$(SRCs)src -I$(UNITY_ROOT)/src 
 LIBS =   -lSDL2 -lSDL2_ttf 
 
-SDLDIR = D:\SDL2
-
 all: clean default
 
 default: $(SRC_FILES1) $(SRC_FILES2)
@@ -44,13 +42,6 @@ default: $(SRC_FILES1) $(SRC_FILES2)
 	$(C_COMPILER) $(CFLAGS) $(INC_DIRS) $(SYMBOLS) $(SRC_FILES2) -o $(TARGET2) $(LIBS)
 	- ./$(TARGET1)
 	- ./$(TARGET2)
-
-
-test_runners/TestDataStructure_Runner.c: TestDataStructure.c
-	ruby $(UNITY_ROOT)/auto/generate_test_runner.rb TestDataStructure.c  test_runners/TestDataStructure_Runner.c
-test_runners/TestCheck_Runner.c: TestCheck.c
-	ruby $(UNITY_ROOT)/auto/generate_test_runner.rb TestCheck.c test_runners/TestCheck_Runner.c
-
 
 clean:
 	$(CLEANUP) $(TARGET1) $(TARGET2)

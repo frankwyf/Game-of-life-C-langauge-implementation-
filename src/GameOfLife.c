@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <unistd.h>
-#include <windows.h>
 #include <stdbool.h>
+#include <SDL2/SDL.h>
 #include "DataStructure.h"
 #include "Check.h"
 #include "NextGenre.h"
@@ -343,8 +342,8 @@ void NextGen(int **map){
             Game[x][y]=map[x][y];
         }
     }
-    //make the evolution "Delay" milliseconds pertime (the sleep function: windows->Sleep, linux->sleep)
-    Sleep(Delay);
+    // Make evolution speed consistent across platforms.
+    SDL_Delay(Delay);
 }
 
 //the function to print every step of the game
