@@ -1,10 +1,10 @@
-# 康威生命游戏（C + SDL2）
+# 康威生命游戏（C + SDL3）
 
 这是一个个人开源作品集项目，基于早期课程作业重构而来。
 
 ## 项目简介
 
-本项目使用 C 语言实现 Conway's Game of Life，并提供 SDL2 可视化界面。
+本项目使用 C 语言实现 Conway's Game of Life，并提供 SDL3 可视化界面。
 
 核心能力：
 
@@ -42,8 +42,7 @@ make
 
 - C 编译器（`gcc` 或 `clang`）
 - `make`
-- SDL2 开发库
-- SDL2_ttf 开发库
+- SDL3 开发库
 
 Windows 详细安装步骤见：`docs/setup/windows.md`。
 

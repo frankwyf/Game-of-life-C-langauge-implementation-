@@ -1,10 +1,10 @@
-# Conway's Game of Life (C + SDL2)
+# Conway's Game of Life (C + SDL3)
 
 A personal open-source portfolio project based on an earlier coursework implementation of Conway's Game of Life.
 
 This repository contains a native C implementation with:
 
-- interactive visualization using SDL2 and SDL2_ttf
+- interactive visualization using SDL3
 - keyboard and mouse controls for runtime editing and replay
 - persistence via `Game.txt`
 - unit tests using Unity
@@ -33,8 +33,7 @@ This repository contains a native C implementation with:
 
 - C compiler (`gcc` or `clang`)
 - `make` (GNU Make compatible)
-- SDL2 development libraries
-- SDL2_ttf development libraries
+- SDL3 development libraries
 
 Detailed setup instructions are in `docs/setup/windows.md`.
 
@@ -44,7 +43,7 @@ Build and run the game:
 
 ```bash
 cd src
-make
+mingw32-make
 ./game
 ```
 
@@ -52,7 +51,7 @@ Build and run tests:
 
 ```bash
 cd test
-make
+mingw32-make
 ```
 
 ## Controls

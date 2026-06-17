@@ -1,10 +1,10 @@
-# Conway's Game of Life（C + SDL2）
+# Conway's Game of Life（C + SDL3）
 
 このリポジトリは、過去の授業課題を個人向けオープンソース作品として再構成したものです。
 
 ## 概要
 
-C 言語で Conway's Game of Life を実装し、SDL2 による可視化を提供します。
+C 言語で Conway's Game of Life を実装し、SDL3 による可視化を提供します。
 
 主な機能：
 
@@ -42,8 +42,7 @@ make
 
 - C コンパイラ（`gcc` または `clang`）
 - `make`
-- SDL2 開発ライブラリ
-- SDL2_ttf 開発ライブラリ
+- SDL3 開発ライブラリ
 
 Windows の詳細は `docs/setup/windows.md` を参照してください。
 
