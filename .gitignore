@@ -1,0 +1,26 @@
+# Build outputs
+*.o
+*.obj
+*.out
+*.exe
+src/game
+src/game.exe
+test/check.exe
+test/datastructure.exe
+
+# Runtime and temporary files
+*.log
+*.tmp
+*.swp
+
+# IDE and editor settings
+.vscode/
+**/.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Legacy archive workspace
+Local_legacy/
