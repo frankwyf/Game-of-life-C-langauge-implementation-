@@ -14,7 +14,15 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential libsdl3-dev
+          sudo apt-get install -y build-essential cmake pkg-config
+          if ! sudo apt-get install -y libsdl3-dev; then
+            echo "libsdl3-dev not available, building SDL3 from source..."
+            git clone --depth 1 https://github.com/libsdl-org/SDL.git /tmp/SDL
+            cmake -S /tmp/SDL -B /tmp/SDL/build -DCMAKE_BUILD_TYPE=Release -DSDL_SHARED=ON -DSDL_STATIC=OFF
+            cmake --build /tmp/SDL/build -j"$(nproc)"
+            sudo cmake --install /tmp/SDL/build
+            sudo ldconfig
+          fi
 
       - name: Build game
         run: |
@@ -58,14 +66,13 @@ jobs:
         with:
           msystem: UCRT64
           update: true
-          install: >-
-            mingw-w64-ucrt-x86_64-gcc
-            mingw-w64-ucrt-x86_64-make
-            mingw-w64-ucrt-x86_64-SDL3
 
       - name: Build game and tests
         shell: msys2 {0}
         run: |
+          pacman -S --noconfirm --needed mingw-w64-ucrt-x86_64-toolchain mingw-w64-ucrt-x86_64-make
+          pacman -S --noconfirm --needed mingw-w64-ucrt-x86_64-SDL3 || pacman -S --noconfirm --needed mingw-w64-ucrt-x86_64-sdl3
+          export PATH="/ucrt64/bin:$PATH"
           export SDL_VIDEODRIVER=dummy
           mingw32-make -C src clean
           mingw32-make -C src
