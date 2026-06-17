@@ -24,3 +24,5 @@ Thumbs.db
 
 # Legacy archive workspace
 Local_legacy/
+
+test/test_input.txt
