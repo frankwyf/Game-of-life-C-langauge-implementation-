@@ -1,6 +1,9 @@
 #ifndef GameWindow_GUARD__H 
 #define GameWindow_GUARD__H
 
+#include <stdio.h>
+#include <stdbool.h>
+
 #ifdef SDL3_AVAILABLE
 #include <SDL3/SDL.h>
 
